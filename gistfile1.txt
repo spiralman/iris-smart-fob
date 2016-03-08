@@ -1,4 +1,3 @@
-Enter file contents here/**
  *  Iris Smart Fob
  *
  *  Copyright 2015 Mitch Pond
