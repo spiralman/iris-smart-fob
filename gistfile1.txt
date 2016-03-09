@@ -1,4 +1,4 @@
- *  Iris Smart Fob
+/* *  Iris Smart Fob
  *
  *  Copyright 2015 Mitch Pond
  *	Presence code adapted from SmartThings Arrival Sensor HA device type
