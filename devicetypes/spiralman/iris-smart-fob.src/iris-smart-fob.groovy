@@ -75,7 +75,7 @@ def installed() {
                    [
                      isComponent: true,
                     componentName: "b${i}",
-                    componentLabel: "${device.deviceName} Button ${i}",
+                    componentLabel: "${device.displayName} Button ${i}",
                     completedSetup: true,
                     componentLabel: "Button ${i}"
                    ])
