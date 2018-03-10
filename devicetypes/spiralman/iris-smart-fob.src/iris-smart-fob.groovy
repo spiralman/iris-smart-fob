@@ -134,12 +134,17 @@ private createButtonEvent(button) {
     def timeDif = currentTime - startOfPress
     def holdTimeMillisec = (settings.holdTime?:3).toInteger() * 1000
 
-    if (timeDif < 0)
+    if (timeDif < 0) {
     	return []	//likely a message sequence issue. Drop this press and wait for another. Probably won't happen...
-    else if (timeDif < holdTimeMillisec)
-    	return createButtonPushedEvent(button)
-    else
-    	return createButtonHeldEvent(button)
+    }
+    else if (timeDif < holdTimeMillisec) {
+      getChildDevices()[button].pushed()
+      return []
+    }
+    else {
+      getChildDevices()[button].held()
+      return []
+    }
 }
 
 private createPressEvent(button) {
