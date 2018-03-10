@@ -125,16 +125,26 @@ private createBatteryEvent(percent) {
 	return createEvent([name: "battery", value: percent])
 }
 
+private getButton(button) {
+  for (child in getChildDevices) {
+    if (child.componentLabel.componentName == "b${button}") {
+      return button
+    }
+  }
+  log.warning "Couldn't find button ${button}"
+  return null
+}
+
 //this method determines if a press should count as a push or a hold and returns the relevant event type
 private createButtonEvent(button) {
   log.debug "Invoking buttonUp on child ${button}"
-  getChildDevices()[button].pushed()
+  getButton(button)?.pushed()
   return []
 }
 
 private createPressEvent(button) {
   log.debug "Invoking buttonDown on child ${button}"
-  getChildDevices()[button].buttonDown()
+  getButton(button)?.buttonDown()
   return []
 }
 
