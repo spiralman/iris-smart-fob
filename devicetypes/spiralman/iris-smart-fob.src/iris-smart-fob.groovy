@@ -1,6 +1,7 @@
 /* *  Iris Smart Fob
  *
  *  Copyright 2015 Mitch Pond
+ *  Copyright 2018 Thomas Stephens
  *	Presence code adapted from SmartThings Arrival Sensor HA device type
  *
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
