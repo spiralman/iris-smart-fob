@@ -27,7 +27,7 @@ def buttonUp() {
 
   if (timeDiff > 0) {
     if (timeDiff > holdTimeMillis) {
-      hold()
+      held()
     }
     else {
       pushed()
