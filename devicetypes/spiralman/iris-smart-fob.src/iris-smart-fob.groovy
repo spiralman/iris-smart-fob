@@ -14,7 +14,7 @@
  *
  */
 metadata {
-	definition (name: "Iris Smart Fob", namespace: "mitchpond", author: "Mitch Pond") {
+	definition (name: "Iris Smart Fob", namespace: "spiralman", author: "Mitch Pond, Thomas Stephens") {
 		capability "Battery"
 		capability "Button"
     capability "Configuration"
@@ -22,12 +22,12 @@ metadata {
 		capability "Sensor"
 
 		command "test"
-    
+
     attribute "lastPress", "string"
-    
-		fingerprint endpointId: "01", profileId: "0104", inClusters: "0000,0001,0003,0007,0020,0B05", outClusters: "0003,0006,0019", model:"3450-L", manufacturer: "CentraLite"
+
+		fingerprint endpointId: "01", profileId: "0104", inClusters: "0000,0001,0003,0007,0020,0B05", outClusters: "0003,0006,0019", model:"3450-L2", manufacturer: "CentraLite"
 	}
-    
+
     preferences{
     	section {
     		input ("holdTime", "number", title: "Minimum time in seconds for a press to count as \"held\"",
@@ -71,13 +71,13 @@ def parse(String description) {
     state.lastCheckin = now()
     log.debug "lastCheckin = "+state.lastCheckin
     handlePresenceEvent(true)
-    
+
 	def results = []
     if (description?.startsWith('catchall:'))
 		results = parseCatchAllMessage(descMap)
 	else if (description?.startsWith('read attr -'))
 		results = parseReportAttributeMessage(descMap)
-        
+
 	return results;
 }
 
@@ -115,12 +115,12 @@ private createButtonEvent(button) {
     def startOfPress = device.latestState('lastPress').date.getTime()
     def timeDif = currentTime - startOfPress
     def holdTimeMillisec = (settings.holdTime?:3).toInteger() * 1000
-    
-    if (timeDif < 0) 
+
+    if (timeDif < 0)
     	return []	//likely a message sequence issue. Drop this press and wait for another. Probably won't happen...
-    else if (timeDif < holdTimeMillisec) 
+    else if (timeDif < holdTimeMillisec)
     	return createButtonPushedEvent(button)
-    else 
+    else
     	return createButtonHeldEvent(button)
 }
 
@@ -133,10 +133,10 @@ private createButtonPushedEvent(button) {
 	log.debug "Button ${button} pushed"
 	return createEvent([
     	name: "button",
-        value: "pushed", 
-        data:[buttonNumber: button], 
+        value: "pushed",
+        data:[buttonNumber: button],
         descriptionText: "${device.displayName} button ${button} was pushed",
-        isStateChange: true, 
+        isStateChange: true,
         displayed: true])
 }
 
@@ -144,8 +144,8 @@ private createButtonHeldEvent(button) {
 	log.debug "Button ${button} held"
 	return createEvent([
     	name: "button",
-        value: "held", 
-        data:[buttonNumber: button], 
+        value: "held",
+        data:[buttonNumber: button],
         descriptionText: "${device.displayName} button ${button} was held",
         isStateChange: true])
 }
