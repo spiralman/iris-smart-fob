@@ -65,6 +65,22 @@ metadata {
 	}
 }
 
+def installed() {
+  for (i in 1..4) {
+    addChildDevice("spiralman",
+                   "Iris Smart Fob Button",
+                   "${device.deviceNetworkId}-b${i}",
+                   null,
+                   [
+                     isComponent: true,
+                    componentName: "b${i}",
+                    componentLabel: "${device.deviceName} Button ${i}",
+                    completedSetup: true,
+                    componentLabel: "Button ${i}"
+                   ])
+  }
+}
+
 def parse(String description) {
 	//log.debug "Parsing '${description}'"
     def descMap = zigbee.parseDescriptionAsMap(description)
