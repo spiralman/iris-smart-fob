@@ -128,7 +128,7 @@ private createBatteryEvent(percent) {
 private getButton(button) {
   for (child in getChildDevices()) {
     if (child.componentName == "b${button}") {
-      return button
+      return child
     }
   }
   log.warning "Couldn't find button ${button}"
