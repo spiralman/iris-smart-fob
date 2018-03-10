@@ -7,12 +7,12 @@ metadata {
     command "pushed"
     command "held"
   }
+}
 
-  def pushed() {
-    sendEvent(name: "button", value: "pushed")
-  }
+def pushed() {
+  sendEvent(name: "button", value: "pushed")
+}
 
-  def held() {
-    sendEvent(name: "button", value: "held")
-  }
+def held() {
+  sendEvent(name: "button", value: "held")
 }
