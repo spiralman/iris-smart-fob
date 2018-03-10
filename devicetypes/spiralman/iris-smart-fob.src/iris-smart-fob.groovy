@@ -138,7 +138,7 @@ private getButton(button) {
 //this method determines if a press should count as a push or a hold and returns the relevant event type
 private createButtonEvent(button) {
   log.debug "Invoking buttonUp on child ${button}"
-  getButton(button)?.pushed()
+  getButton(button)?.buttonUp()
   return []
 }
 

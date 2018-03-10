@@ -37,10 +37,10 @@ def buttonUp() {
 
 private pushed() {
   log.debug "${device.label} pushed"
-  sendEvent(name: "button", value: "pushed")
+  sendEvent(name: "button", value: "pushed", data: [buttonNumber: 1])
 }
 
 private held() {
   log.debug "${device.label} held"
-  sendEvent(name: "button", value: "held")
+  sendEvent(name: "button", value: "held", data: [buttonNumber: 1])
 }
