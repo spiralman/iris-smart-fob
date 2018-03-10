@@ -127,7 +127,7 @@ private createBatteryEvent(percent) {
 
 private getButton(button) {
   for (child in getChildDevices) {
-    if (child.componentLabel.componentName == "b${button}") {
+    if (child.componentName == "b${button}") {
       return button
     }
   }
