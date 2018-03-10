@@ -24,8 +24,6 @@ metadata {
 
 		command "test"
 
-    attribute "lastPress", "string"
-
 		fingerprint endpointId: "01", profileId: "0104", inClusters: "0000,0001,0003,0007,0020,0B05", outClusters: "0003,0006,0019", model:"3450-L2", manufacturer: "CentraLite"
 	}
 
@@ -129,48 +127,15 @@ private createBatteryEvent(percent) {
 
 //this method determines if a press should count as a push or a hold and returns the relevant event type
 private createButtonEvent(button) {
-	def currentTime = now()
-    def startOfPress = device.latestState('lastPress').date.getTime()
-    def timeDif = currentTime - startOfPress
-    def holdTimeMillisec = (settings.holdTime?:3).toInteger() * 1000
-
-    if (timeDif < 0) {
-    	return []	//likely a message sequence issue. Drop this press and wait for another. Probably won't happen...
-    }
-    else if (timeDif < holdTimeMillisec) {
-      getChildDevices()[button].pushed()
-      return []
-    }
-    else {
-      getChildDevices()[button].held()
-      return []
-    }
+  log.debug "Invoking buttonUp on child ${button}"
+  getChildDevices()[button].pushed()
+  return []
 }
 
 private createPressEvent(button) {
-	state.lastPress = [button: button, time: now()]
-	return createEvent([name: 'lastPress', value: now(), data:[buttonNumber: button], displayed: false])
-}
-
-private createButtonPushedEvent(button) {
-	log.debug "Button ${button} pushed"
-	return createEvent([
-    	name: "button",
-        value: "pushed",
-        data:[buttonNumber: button],
-        descriptionText: "${device.displayName} button ${button} was pushed",
-        isStateChange: true,
-        displayed: true])
-}
-
-private createButtonHeldEvent(button) {
-	log.debug "Button ${button} held"
-	return createEvent([
-    	name: "button",
-        value: "held",
-        data:[buttonNumber: button],
-        descriptionText: "${device.displayName} button ${button} was held",
-        isStateChange: true])
+  log.debug "Invoking buttonDown on child ${button}"
+  getChildDevices()[button].buttonDown()
+  return []
 }
 
 private getBatteryLevel(rawValue) {
