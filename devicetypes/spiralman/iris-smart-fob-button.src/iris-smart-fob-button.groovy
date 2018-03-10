@@ -13,7 +13,7 @@ metadata {
 
 def buttonDown() {
   log.debug "${device.label} button down"
-  sendEvent(name: 'lastPress', value: now())
+  sendEvent(name: 'lastPress', value: now(), data: [buttonNumber: 1])
 }
 
 def buttonUp() {
