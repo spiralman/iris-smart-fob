@@ -69,7 +69,7 @@ def installed() {
   for (i in 1..4) {
     log.debug "Adding button ${i}"
     addChildDevice("spiralman",
-                   "Iris Smart Fob Button",
+                   "Iris Smart Fob Button ${i}",
                    "${device.deviceNetworkId}-b${i}",
                    null,
                    [
