@@ -126,13 +126,7 @@ private createBatteryEvent(percent) {
 }
 
 private getButton(button) {
-  for (child in getChildDevices()) {
-    if (child.componentName == "b${button}") {
-      return child
-    }
-  }
-  log.warning "Couldn't find button ${button}"
-  return null
+  return getChildDevice("${device.deviceNetworkId}-b${button}")
 }
 
 //this method determines if a press should count as a push or a hold and returns the relevant event type
