@@ -32,8 +32,8 @@ metadata {
     	section {
     		input ("holdTime", "number", title: "Minimum time in seconds for a press to count as \"held\"",
         		defaultValue: 3, displayDuringSetup: false)
+        input ("enableHold", "boolean", title: "True to calculate hold events, false to only send pushed events", defaultValue: false, displayDuringSetup: false)
         }
-      input ("enableHold", "boolean", title: "True to calculate hold events, false to only send pushed events", defaultValue: false, displayDuringSetup: false)
         section {
             input "checkInterval", "enum", title: "Presence timeout (minutes)",
                 defaultValue:"2", options: ["2", "3", "5"], displayDuringSetup: false
