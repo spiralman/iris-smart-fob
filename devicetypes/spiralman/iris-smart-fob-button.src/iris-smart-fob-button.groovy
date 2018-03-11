@@ -20,12 +20,14 @@ def buttonUp() {
   log.debug "${device.label} button up"
   def currentTime = now()
   def timeDiff = 0
-  def holdTimeMillis = (parent.settings.holdTime?:3).toInteger() * 1000
-  log.debug "${device.label} hold threshold: ${holdTimeMillis}"
+  def enableHold = parent.settings.enableHold
 
   def startOfPress = device.latestState('lastPress').date.getTime()
 
-  if (startOfPress != 0) {
+  if (enableHold && startOfPress != 0) {
+    def holdTimeMillis = (parent.settings.holdTime?:3).toInteger() * 1000
+    log.debug "${device.label} hold threshold: ${holdTimeMillis}"
+
     timeDiff = currentTime - startOfPress
     log.debug "${device.label} time diff: ${timeDiff}"
   }
