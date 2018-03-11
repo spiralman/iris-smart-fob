@@ -21,7 +21,7 @@ def buttonUp() {
   def currentTime = now()
   def timeDiff = 0
   def enableHold = parent.settings.enableHold
-
+  log.debug "${device.label} hold enabled: ${enableHold}"
   def startOfPress = device.latestState('lastPress').date.getTime()
 
   if (enableHold && startOfPress != 0) {
