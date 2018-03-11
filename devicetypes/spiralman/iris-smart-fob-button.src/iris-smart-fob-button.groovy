@@ -19,7 +19,7 @@ def buttonDown() {
 def buttonUp() {
   log.debug "${device.label} button up"
   def timeDiff = 0
-  def enableHold = parent.settings.enableHold
+  def enableHold = parent.settings.enableHold.toBoolean()
   def holdTimeMillis = (parent.settings.holdTime?:4).toInteger() * 1000
 
   log.debug "${device.label} hold enabled: ${enableHold}"
