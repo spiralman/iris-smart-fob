@@ -13,26 +13,31 @@ metadata {
 
 def buttonDown() {
   log.debug "${device.label} button down"
-  sendEvent(name: 'lastPress', value: now(), data: [buttonNumber: 1])
+  sendEvent(name: 'lastPress', value: now())
 }
 
 def buttonUp() {
   log.debug "${device.label} button up"
   def currentTime = now()
-  def startOfPress = device.latestState('lastPress').date.getTime()
-  def timeDiff = currentTime - startOfPress
-  log.debug "${device.label} time diff: ${timeDiff}"
+  def timeDiff = 0
   def holdTimeMillis = (parent.settings.holdTime?:3).toInteger() * 1000
   log.debug "${device.label} hold threshold: ${holdTimeMillis}"
 
-  if (timeDiff > 0) {
-    if (timeDiff > holdTimeMillis) {
-      held()
-    }
-    else {
-      pushed()
-    }
+  def startOfPress = device.latestState('lastPress').date.getTime()
+
+  if (startOfPress != 0) {
+    timeDiff = currentTime - startOfPress
+    log.debug "${device.label} time diff: ${timeDiff}"
   }
+
+  if (timeDiff > holdTimeMillis) {
+    held()
+  }
+  else {
+    pushed()
+  }
+
+  sendEvent(name: 'lastPress', value: 0)
 }
 
 private pushed() {
