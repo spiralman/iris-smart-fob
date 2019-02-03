@@ -35,23 +35,17 @@ metadata {
     }
 
 	tiles(scale: 2) {
-    	standardTile("button", "device.button", decoration: "flat", width: 2, height: 2) {
-        	state "default", icon: "st.unknown.zwave.remote-controller", backgroundColor: "#ffffff", action: "test()"
-            state "button 1 pushed", icon: "st.unknown.zwave.remote-controller", backgroundColor: "#79b821", action: "test()"
-            state "button 2 pushed", icon: "st.unknown.zwave.remote-controller", backgroundColor: "#79b821", action: "test()"
-            state "button 3 pushed", icon: "st.unknown.zwave.remote-controller", backgroundColor: "#79b821", action: "test()"
-            state "button 4 pushed", icon: "st.unknown.zwave.remote-controller", backgroundColor: "#79b821", action: "test()"
-            state "button 1 held", icon: "st.unknown.zwave.remote-controller", backgroundColor: "#79b821", action: "test()"
-            state "button 2 held", icon: "st.unknown.zwave.remote-controller", backgroundColor: "#79b821", action: "test()"
-            state "button 3 held", icon: "st.unknown.zwave.remote-controller", backgroundColor: "#79b821", action: "test()"
-            state "button 4 held", icon: "st.unknown.zwave.remote-controller", backgroundColor: "#79b821", action: "test()"
-        }
 		valueTile("battery", "device.battery", decoration: "flat", width: 2, height: 2) {
 			state "battery", label:'${currentValue}% battery', unit:""
 		}
 
+    childDeviceTile("button1", "b1", height: 2, width: 2, childTileName: "Button 1")
+    childDeviceTile("button2", "b2", height: 2, width: 2, childTileName: "Button 2")
+    childDeviceTile("button3", "b3", height: 2, width: 2, childTileName: "Button 3")
+    childDeviceTile("button4", "b4", height: 2, width: 2, childTileName: "Button 4")
+
 		main (["battery"])
-		details(["button","battery"])
+		details(["battery"])
 	}
 }
 
