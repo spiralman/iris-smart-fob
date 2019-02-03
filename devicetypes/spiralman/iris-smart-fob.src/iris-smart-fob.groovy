@@ -19,8 +19,6 @@ metadata {
 		capability "Battery"
 		capability "Button"
     capability "Configuration"
-		capability "Presence Sensor"
-		capability "Sensor"
 
 		command "test"
 
@@ -34,17 +32,9 @@ metadata {
         		defaultValue: 3, displayDuringSetup: false)
         input ("enableHold", "boolean", title: "True to calculate hold events, false to only send pushed events", defaultValue: false, displayDuringSetup: false)
         }
-        section {
-            input "checkInterval", "enum", title: "Presence timeout (minutes)",
-                defaultValue:"2", options: ["2", "3", "5"], displayDuringSetup: false
-        }
     }
 
 	tiles(scale: 2) {
-    	standardTile("presence", "device.presence", width: 4, height: 4, canChangeBackground: true) {
-            state "present", labelIcon:"st.presence.tile.present", backgroundColor:"#53a7c0"
-            state "not present", labelIcon:"st.presence.tile.not-present", backgroundColor:"#ffffff"
-        }
     	standardTile("button", "device.button", decoration: "flat", width: 2, height: 2) {
         	state "default", icon: "st.unknown.zwave.remote-controller", backgroundColor: "#ffffff", action: "test()"
             state "button 1 pushed", icon: "st.unknown.zwave.remote-controller", backgroundColor: "#79b821", action: "test()"
@@ -60,8 +50,8 @@ metadata {
 			state "battery", label:'${currentValue}% battery', unit:""
 		}
 
-		main (["presence","battery"])
-		details(["presence","button","battery"])
+		main (["battery"])
+		details(["button","battery"])
 	}
 }
 
@@ -84,17 +74,18 @@ def installed() {
 
 def parse(String description) {
 	//log.debug "Parsing '${description}'"
-    def descMap = zigbee.parseDescriptionAsMap(description)
-    //log.debug descMap
-    state.lastCheckin = now()
-    log.debug "lastCheckin = "+state.lastCheckin
-    handlePresenceEvent(true)
+  def descMap = zigbee.parseDescriptionAsMap(description)
+  //log.debug descMap
+  state.lastCheckin = now()
+  log.debug "lastCheckin = "+state.lastCheckin
 
 	def results = []
-    if (description?.startsWith('catchall:'))
+  if (description?.startsWith('catchall:')) {
 		results = parseCatchAllMessage(descMap)
-	else if (description?.startsWith('read attr -'))
-		results = parseReportAttributeMessage(descMap)
+  }
+  else if (description?.startsWith('read attr -')) {
+    results = parseReportAttributeMessage(descMap)
+  }
 
 	return results;
 }
@@ -112,10 +103,10 @@ def configure(){
 
 def parseCatchAllMessage(descMap) {
 	//log.debug descMap
-    if (descMap?.clusterId == "0006" && descMap?.command == "01") 		//button pressed
-    	createPressEvent(descMap.sourceEndpoint as int)
-    else if (descMap?.clusterId == "0006" && descMap?.command == "00") 	//button released
-    	createButtonEvent(descMap.sourceEndpoint as int)
+  if (descMap?.clusterId == "0006" && descMap?.command == "01") 		//button pressed
+    createPressEvent(descMap.sourceEndpoint as int)
+  else if (descMap?.clusterId == "0006" && descMap?.command == "00") 	//button released
+  createButtonEvent(descMap.sourceEndpoint as int)
 }
 
 def parseReportAttributeMessage(descMap) {
@@ -158,46 +149,6 @@ private getBatteryLevel(rawValue) {
     return ((vBatt - min) / (max - min) * 100) as int
 }
 
-private handlePresenceEvent(present) {
-    def wasPresent = device.currentState("presence")?.value == "present"
-    if (!wasPresent && present) {
-        log.debug "Sensor is present"
-        startTimer()
-    } else if (!present) {
-        log.debug "Sensor is not present"
-        stopTimer()
-    }
-    def linkText = getLinkText(device)
-    def eventMap = [
-        name: "presence",
-        value: present ? "present" : "not present",
-        linkText: linkText,
-        descriptionText: "${linkText} has ${present ? 'arrived' : 'left'}",
-    ]
-    log.debug "Creating presence event: ${eventMap}"
-    sendEvent(eventMap)
-}
-
-private startTimer() {
-    log.debug "Scheduling periodic timer"
-    schedule("0 * * * * ?", checkPresenceCallback)
-}
-
-private stopTimer() {
-    log.debug "Stopping periodic timer"
-    unschedule()
-}
-
-def checkPresenceCallback() {
-    def timeSinceLastCheckin = (now() - state.lastCheckin) / 1000
-    def theCheckInterval = (checkInterval ? checkInterval as int : 2) * 60
-    log.debug "Sensor checked in ${timeSinceLastCheckin} seconds ago"
-    if (timeSinceLastCheckin >= theCheckInterval) {
-        handlePresenceEvent(false)
-    }
-}
-
-// handle commands
 def test() {
     log.debug "Test"
 	zigbee.refreshData("0","4") + zigbee.refreshData("0","5") + zigbee.refreshData("1","0x0020")
