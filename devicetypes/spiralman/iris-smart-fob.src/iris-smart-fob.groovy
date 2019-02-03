@@ -70,8 +70,6 @@ def parse(String description) {
 	//log.debug "Parsing '${description}'"
   def descMap = zigbee.parseDescriptionAsMap(description)
   //log.debug descMap
-  state.lastCheckin = now()
-  log.debug "lastCheckin = "+state.lastCheckin
 
 	def results = []
   if (description?.startsWith('catchall:')) {
@@ -96,15 +94,16 @@ def configure(){
 }
 
 def parseCatchAllMessage(descMap) {
-	//log.debug descMap
-  if (descMap?.clusterId == "0006" && descMap?.command == "01") 		//button pressed
-    createPressEvent(descMap.sourceEndpoint as int)
-  else if (descMap?.clusterId == "0006" && descMap?.command == "00") 	//button released
-  createButtonEvent(descMap.sourceEndpoint as int)
+  if (descMap?.clusterId == "0006" && descMap?.command == "00") {
+    //button released
+    return createButtonEvent(descMap.sourceEndpoint as int)
+  }
 }
 
 def parseReportAttributeMessage(descMap) {
-	if (descMap?.cluster == "0001" && descMap?.attrId == "0020") createBatteryEvent(getBatteryLevel(descMap.value))
+	if (descMap?.cluster == "0001" && descMap?.attrId == "0020") {
+    return createBatteryEvent(getBatteryLevel(descMap.value))
+  }
 }
 
 private createBatteryEvent(percent) {
@@ -125,14 +124,7 @@ private getButton(button) {
 //this method determines if a press should count as a push or a hold and returns the relevant event type
 private createButtonEvent(button) {
   log.debug "Invoking buttonUp on child ${button}"
-  getButton(button)?.buttonUp()
-  return []
-}
-
-private createPressEvent(button) {
-  log.debug "Invoking buttonDown on child ${button}"
-  getButton(button)?.buttonDown()
-  return []
+  return getButton(button)?.buttonUp()
 }
 
 private getBatteryLevel(rawValue) {

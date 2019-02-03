@@ -4,57 +4,12 @@ metadata {
               author: "Mitch Pond, Thomas Stephens") {
     capability "Button"
 
-    attribute "lastPress", "string"
-
-    command "buttonDown"
     command "buttonUp"
 
-    tiles {
-      standardTile("button", "device.button", decoration: "flat") {
-        state("pushed", icon: "st.unknown.zwave.remote-controller")
-      }
-    }
   }
-}
-
-def buttonDown() {
-  log.debug "${device.label} button down"
-  sendEvent(name: 'lastPress', value: now())
 }
 
 def buttonUp() {
   log.debug "${device.label} button up"
-  def timeDiff = 0
-  def enableHold = parent.settings.enableHold.toBoolean()
-  def holdTimeMillis = (parent.settings.holdTime?:4).toInteger() * 1000
-
-  log.debug "${device.label} hold enabled: ${enableHold}"
-
-  if (enableHold && startOfPress != 0) {
-    def currentTime = now()
-    def startOfPress = device.latestState('lastPress').date.getTime()
-    log.debug "${device.label} hold threshold: ${holdTimeMillis}"
-
-    timeDiff = currentTime - startOfPress
-    log.debug "${device.label} time diff: ${timeDiff}"
-  }
-
-  if (timeDiff > holdTimeMillis) {
-    held()
-  }
-  else {
-    pushed()
-  }
-
-  sendEvent(name: 'lastPress', value: 0)
-}
-
-private pushed() {
-  log.debug "${device.label} pushed"
-  sendEvent(name: "Button", value: "pushed", data: [buttonNumber: 1])
-}
-
-private held() {
-  log.debug "${device.label} held"
-  sendEvent(name: "Button", value: "held", data: [buttonNumber: 1])
+  return createEvent([name: "Button", value: "pushed", data: [buttonNumber: 1]])
 }
