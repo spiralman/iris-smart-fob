@@ -39,10 +39,10 @@ metadata {
 			state "battery", label:'${currentValue}% battery', unit:""
 		}
 
-    childDeviceTile("button1", "b1", height: 2, width: 2, childTileName: "Button 1")
-    childDeviceTile("button2", "b2", height: 2, width: 2, childTileName: "Button 2")
-    childDeviceTile("button3", "b3", height: 2, width: 2, childTileName: "Button 3")
-    childDeviceTile("button4", "b4", height: 2, width: 2, childTileName: "Button 4")
+    childDeviceTile("button1", "b1", height: 2, width: 2, childTileName: "button")
+    childDeviceTile("button2", "b2", height: 2, width: 2, childTileName: "button")
+    childDeviceTile("button3", "b3", height: 2, width: 2, childTileName: "button")
+    childDeviceTile("button4", "b4", height: 2, width: 2, childTileName: "button")
 
 		main (["battery"])
 		details(["battery"])
