@@ -129,7 +129,7 @@ private createButtonEvent(button) {
   def childButton = getButton(button)
   def event = []
   if (childButton) {
-    log.debug "Found button; invoking buttonUp"
+    log.debug "Found button ${childButton}; invoking buttonUp"
     event = childButton.buttonUp()
   }
   log.debug "Button created event ${event}"
