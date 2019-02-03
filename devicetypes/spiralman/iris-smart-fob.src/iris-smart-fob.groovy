@@ -126,7 +126,14 @@ private getButton(button) {
 
 private createButtonEvent(button) {
   log.debug "Invoking buttonUp on child ${button}"
-  return getButton(button)?.buttonUp()
+  def button = getButton(button)
+  def event = []
+  if (button) {
+    log.debug "Found button; invoking buttonUp"
+    event = button.buttonUp()
+  }
+  log.debug "Button created event ${event}"
+  return event
 }
 
 private getBatteryLevel(rawValue) {
