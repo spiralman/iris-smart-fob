@@ -39,11 +39,6 @@ metadata {
 			state "battery", label:'${currentValue}% battery', unit:""
 		}
 
-    childDeviceTile("button1", "b1", height: 2, width: 2, childTileName: "button")
-    childDeviceTile("button2", "b2", height: 2, width: 2, childTileName: "button")
-    childDeviceTile("button3", "b3", height: 2, width: 2, childTileName: "button")
-    childDeviceTile("button4", "b4", height: 2, width: 2, childTileName: "button")
-
 		main (["battery"])
 		details(["battery"])
 	}
@@ -126,15 +121,7 @@ private getButton(button) {
 
 private createButtonEvent(button) {
   log.debug "Invoking buttonUp on child ${button}"
-  def childButton = getButton(button)
-  def event = []
-  if (childButton) {
-    log.debug "Found button ${childButton}; invoking buttonUp"
-    event = childButton.buttonUp()
-    log.debug "Hello?"
-  }
-  log.debug "Button created event ${event}"
-  return event
+  return getButton(button)?.buttonUp()
 }
 
 private getBatteryLevel(rawValue) {
