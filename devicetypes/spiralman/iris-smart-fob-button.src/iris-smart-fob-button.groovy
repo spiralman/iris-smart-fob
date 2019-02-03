@@ -11,5 +11,5 @@ metadata {
 
 def buttonUp() {
   log.debug "${device.label} button up"
-  return createEvent([name: "Button", value: "pushed", data: [buttonNumber: 1]])
+  return sendEvent([name: "Button", value: "pushed", data: [buttonNumber: 1]])
 }
