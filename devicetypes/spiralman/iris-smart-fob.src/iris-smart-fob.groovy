@@ -98,6 +98,7 @@ def configure(){
 def parseCatchAllMessage(descMap) {
   if (descMap?.clusterId == "0006" && descMap?.command == "00") {
     //button released
+    log.debug "button up command"
     return createButtonEvent(descMap.sourceEndpoint as int)
   }
 }
@@ -123,7 +124,6 @@ private getButton(button) {
   return null
 }
 
-//this method determines if a press should count as a push or a hold and returns the relevant event type
 private createButtonEvent(button) {
   log.debug "Invoking buttonUp on child ${button}"
   return getButton(button)?.buttonUp()
