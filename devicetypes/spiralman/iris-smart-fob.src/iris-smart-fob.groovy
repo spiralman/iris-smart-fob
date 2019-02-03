@@ -79,7 +79,7 @@ def parse(String description) {
     results = parseReportAttributeMessage(descMap)
   }
 
-  log.debug "parsed events", results
+  log.debug "parsed events: ${results}"
 
 	return results;
 }
