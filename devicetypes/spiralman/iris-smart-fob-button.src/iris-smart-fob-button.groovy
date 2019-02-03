@@ -13,6 +13,7 @@ metadata {
       standardTile("button", "device.button", decoration: "flat") {
         state("pushed", icon: "st.unknown.zwave.remote-controller")
       }
+    }
   }
 }
 
