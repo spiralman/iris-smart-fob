@@ -79,6 +79,8 @@ def parse(String description) {
     results = parseReportAttributeMessage(descMap)
   }
 
+  log.debug "parsed events", results
+
 	return results;
 }
 
