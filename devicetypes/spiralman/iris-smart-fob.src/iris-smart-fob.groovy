@@ -39,10 +39,6 @@ metadata {
 			state "battery", label:'${currentValue}% battery', unit:""
 		}
 
-    valueTile("testing", "device.button", decoration: "flat", width: 2, height: 2) {
-      state "val", label: "value", defaultState: true
-    }
-
 		main (["battery"])
 		details(["battery"])
 	}
@@ -56,7 +52,7 @@ def installed() {
                    "${device.deviceNetworkId}-b${i}",
                    null,
                    [
-                     isComponent: true,
+                     isComponent: false,
                     componentName: "b${i}",
                     label: "${device.displayName} Button ${i}",
                     completedSetup: true,
