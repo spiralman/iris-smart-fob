@@ -96,9 +96,11 @@ def configure(){
 
 def parseCatchAllMessage(descMap) {
   if (descMap?.clusterId == "0006" && descMap?.command == "00") {
+    def buttonNumber = descMap.sourceEndpoint as int
     //button released
     log.debug "button up command"
-    return createButtonEvent(descMap.sourceEndpoint as int)
+    sendEvent(name: "button", value: "pushed", data: [buttonNumber: buttonNumber], descriptionText: "Button ${buttonNumber} was pushed", isStateChange: true)
+    return createButtonEvent(buttonNumber)
   }
 }
 
