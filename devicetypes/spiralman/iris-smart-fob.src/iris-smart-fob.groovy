@@ -44,14 +44,21 @@ metadata {
 	}
 }
 
-def BUTTON_NAMES = [
-  1: "B",
-  2: "A",
-  3: "Door",
-  4: "House"
-]
-
 def installed() {
+  log.debug "Installed Iris Smart Fob"
+
+  sendEvent(name: "supportedButtonValues", value: ["pushed"].encodeAsJSON(), displayed: false)
+  sendEvent(name: "numberOfButtons", value: 4, displayed: false)
+
+  def BUTTON_NAMES = [
+    1: "B",
+    2: "A",
+    3: "Door",
+    4: "House"
+  ]
+
+  log.debug("Button names are ${BUTTON_NAMES.encodeAsJSON()}")
+
   for (i in 1..4) {
     def name = BUTTON_NAMES[i]
     log.debug "Adding button ${i} named ${name}"
@@ -70,8 +77,6 @@ def installed() {
     child.sendEvent(name: "supportedButtonValues", value: ["pushed"].encodeAsJSON(), displayed: false)
     child.sendEvent(name: "numberOfButtons", value: 1, displayed: false)
   }
-  sendEvent(name: "supportedButtonValues", value: ["pushed"].encodeAsJSON(), displayed: false)
-  sendEvent(name: "numberOfButtons", value: 4, displayed: false)
 }
 
 def parse(String description) {
