@@ -39,6 +39,10 @@ metadata {
 			state "battery", label:'${currentValue}% battery', unit:""
 		}
 
+    valueTile("testing", "device.button", decoration: "flat", width: 2, height: 2) {
+      state "val", label: "value", defaultState: true
+    }
+
 		main (["battery"])
 		details(["battery"])
 	}
