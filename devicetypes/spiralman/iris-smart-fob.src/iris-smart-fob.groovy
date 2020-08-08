@@ -44,19 +44,28 @@ metadata {
 	}
 }
 
+def BUTTON_NAMES = [
+  1: "B",
+  2: "A",
+  3: "Door",
+  4: "House"
+]
+
 def installed() {
   for (i in 1..4) {
-    log.debug "Adding button ${i}"
-    def child = addChildDevice("spiralman",
-                   "Iris Smart Fob Button",
-                   "${device.deviceNetworkId}-b${i}",
-                   null,
-                   [
-                     isComponent: true,
-                    componentName: "b${i}",
-                    label: "${device.displayName} Button ${i}",
-                    completedSetup: true,
-                    componentLabel: "Button ${i}"
+    def name = BUTTON_NAMES[i]
+    log.debug "Adding button ${i} named ${name}"
+    def child = addChildDevice(
+      "spiralman",
+      "Iris Smart Fob Button",
+      "${device.deviceNetworkId}-b${i}",
+      null,
+      [
+        isComponent: false,
+        componentName: "b${i}",
+        label: "${device.displayName} ${name} Button",
+        completedSetup: true,
+        componentLabel: "Button ${i}"
       ])
     child.sendEvent(name: "supportedButtonValues", value: ["pushed"].encodeAsJSON(), displayed: false)
     child.sendEvent(name: "numberOfButtons", value: 1, displayed: false)
